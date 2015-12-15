@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	">
+
+
+	
+	<bean class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:/dsConfig.properties"></property>
+		<constructor-arg ref="stringEncrypter"/>
+	</bean> 
+	
+	<!-- 加密外部属性 属性重写 -->
+	<bean class="org.jasypt.spring.properties.EncryptablePropertyOverrideConfigurer">
+		<property name="location" value="classpath:/dsConfig.properties"></property>
+		<constructor-arg ref="stringEncrypter"/>
+	</bean> 
+	
+	<bean id="stringEncrypter" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor" >
+		<property name="config" ref="environmentConfig"></property><!-- p:config-ref="environmentConfig" -->
+	</bean>
+	<bean id="environmentConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES"/>
+<!-- 		<property name="passwordEnvName" value="DB_ENCRYPTION_PWD"></property>
+ -->	
+ <property name="password" value="root"></property>
+ </bean>
+
+ 	<!-- 配置数据源 -属性占位符配置 -->
+	  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	  	<property name="driverClassName" value="${dataSource.driverClassName}"/>
+	  	<property name="url" value="${dataSource.url}"/>
+	  	<property name="username" value="${dataSource.username}"/>
+	  	<property name="password" value="${dataSource.password}"/>
+	  </bean>
+ 
+
+
+</beans>

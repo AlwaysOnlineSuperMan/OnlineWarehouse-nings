@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziquan.dao.UserMapper" >
+
+  <resultMap id="BaseResultMap" type="com.ziquan.entity.User" >
+    <id column="userid" property="userId" jdbcType="INTEGER" />
+    <result column="userno" property="userNo" jdbcType="VARCHAR" />
+    <result column="username" property="userName" jdbcType="VARCHAR" />
+    <result column="userpwd" property="userPwd" jdbcType="VARCHAR" />
+       <result column="userflag" property="userFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    userid, userno, username,userpwd,userflag
+  </sql>
+  
+  <select id="tologin" resultMap="BaseResultMap" parameterType="com.ziquan.entity.User" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userno  = #{userNo,jdbcType=VARCHAR} and userpwd=#{userPwd,jdbcType=VARCHAR}
+  </select>
+  
+  
+
+</mapper>
